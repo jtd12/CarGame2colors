@@ -19,12 +19,14 @@ public class resetCar : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag=="Player")
+        if (other.tag == "Player")
         {
             other.transform.position = resetPos.position;
             other.transform.rotation = resetPos.rotation;
 
             other.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+            other.GetComponent<Car1>().currentSpeed = 0.0f;
+            
         }
     }
 

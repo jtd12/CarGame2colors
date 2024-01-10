@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-
+using CnControls;
 
 public class Car1 : MonoBehaviour
 {
     public float maxTorque = 50f;
-	private float currentSpeed=0.0f;
+	public float currentSpeed=0.0f;
     public Transform centerOfMass;
 	public Text guiSpeed;
     public WheelCollider[] wheelColliders = new WheelCollider[4];
@@ -86,14 +86,21 @@ public class Car1 : MonoBehaviour
 			changeCam();
 			resetPosition();
 
+			
+
 			guiSpeed.text = currentSpeed.ToString();
 			pointsText.text = points.ToString();
 
 			float speedFactor = m_rigidBody.velocity.magnitude;
-			currentSpeed = (Mathf.PI * 2 * wheelColliders[0].radius) * wheelColliders[0].rpm * 100 / 10000;
+			currentSpeed = (Mathf.PI * 2 * wheelColliders[0].radius) * wheelColliders[0].rpm * 75 / 10000;
+
+			if (currentSpeed > 300)
+				currentSpeed = 300;
+
+
 			float currentsteerangle = Mathf.Lerp(lowspeedangle, hightspeedangle, speedFactor);
-			currentsteerangle *= Input.GetAxis("Horizontal");
-			float accelerate = Input.GetAxis("Vertical");
+			currentsteerangle *= CnControls.CnInputManager.GetAxis("Horizontal");
+			float accelerate = CnControls.CnInputManager.GetAxis("Vertical");
 
 
 			wheelColliders[0].steerAngle = currentsteerangle;
@@ -114,7 +121,7 @@ public class Car1 : MonoBehaviour
 
 							wheelColliders[i].brakeTorque = 20000;
 						}
-						if (Input.GetAxis("Jump") > 0.1)
+						if (CnControls.CnInputManager.GetAxis("Jump") > 0.1)
 						{
 
 							wheelColliders[i].brakeTorque = 55000;
@@ -160,7 +167,7 @@ public class Car1 : MonoBehaviour
 	
 	void changeCam()
 	{
-		if (Input.GetAxis("cam")>0.1)
+		if (CnControls.CnInputManager.GetAxis("cam")>0.1)
 		{
 			camInc += 1;
 			if (camInc > 5)
